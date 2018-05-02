@@ -1,0 +1,23 @@
+{
+  "name": "yue-db-service",
+  "version": "0.0.1",
+  "description": "node dbservice",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "dbservice"
+  ],
+  "author": "Yue.",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.5.1",
+    "koa-body": "^2.5.0",
+    "koa-router": "^7.4.0",
+    "log4js": "^2.5.3",
+    "mysql2": "^1.5.3",
+    "sequelize": "^4.37.6",
+    "yue-redis-handler": "0.0.2"
+  }
+}
