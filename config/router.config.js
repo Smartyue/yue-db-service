@@ -14,9 +14,12 @@ router.post('/',async (ctx,next)=>{
         ctx.result=await Service(data.database,data.table,data.method,data.where || null,data.paras || null, data.result || null);
 
     }catch (e){
+
+        ctx.$logger.error(`==Something is Error!error:${e.error},code:${e.code}==`);
+
         ctx.error={
             code:'REQUEST_ERROR',
-            msg:JSON.stringify(e)
+            msg: e.code
         }
     }
     await next();
