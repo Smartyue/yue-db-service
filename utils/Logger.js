@@ -1,26 +1,41 @@
 /**
  * Created by yuanjianxin on 2018/1/18.
  */
-const log4js=require('log4js');
-const filename=process.env.LOG_FILE || './logs/log';
-const pattern="-yyyy-MM-dd.log";
-const log_config={
+const log4js = require('log4js')
+const containId = process.env.CONTAINER_ID || 'dev';
+const logPath = process.env.LOG_PATH || './logs';
+log4js.configure({
+    replaceConsole: true,
     appenders: {
-        out: { type: 'console' },
-        DbService: { type: 'dateFile', filename,pattern, alwaysIncludePattern:true },
-        result: { type: 'dateFile', filename,pattern, alwaysIncludePattern:true},
-        error: { type: 'dateFile', filename, pattern,alwaysIncludePattern:true},
-        default: { type: 'dateFile', filename,pattern,alwaysIncludePattern:true},
-        rate: { type: 'dateFile', filename, pattern,alwaysIncludePattern:true}
+        stdout: {//控制台输出
+            type: 'stdout'
+        },
+        access: {//请求日志
+            type: 'dateFile',
+            filename: logPath + '/access-' + containId + '.log',
+            daysToKeep: 30,
+            compress: true
+        },
+        error: {//错误日志
+            type: 'dateFile',
+            filename: logPath + '/error-' + containId + '.log',
+            daysToKeep: 30,
+            compress: true
+        },
+        app: {//其他日志
+            type: 'dateFile',
+            filename: logPath + '/app-' + containId + '.log',
+            daysToKeep: 30,
+            compress: true
+        }
     },
     categories: {
-        default: { appenders: ['out','default'], level: 'info' },
-        DbService: { appenders: ['DbService'], level: 'info'},
-        result: { appenders: ['result'], level: 'info' },
-        error: { appenders: ['error'], level: 'error' },
-        rate: { appenders: ['rate'], level: 'info' }
+        default: {appenders: ['stdout', 'access'], level: 'debug'},//appenders:采用的appender,取appenders项,level:设置级别
+        error: {appenders: ['stdout', 'error'], level: 'error'},
+        app: {appenders: ['stdout', 'app'], level: 'debug'}
     }
-}
-log4js.configure(log_config);
-const logger=log4js.getLogger('DbService');
-module.exports=logger;
+});
+
+module.exports = (name = 'default') => {
+    return log4js.getLogger(name);
+};
