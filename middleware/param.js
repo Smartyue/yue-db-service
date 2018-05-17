@@ -33,10 +33,5 @@ module.exports=async (ctx,next)=>{
     }
 
     ctx.status=200;
-    ctx.body={
-        code:'OK',
-        data:ctx.result,
-        time:Date.now()
-    }
-
+    ctx.body = ctx.result;
 }
