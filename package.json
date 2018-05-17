@@ -1,6 +1,6 @@
 {
   "name": "yue-db-service",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "node dbservice",
   "main": "index.js",
   "scripts": {
