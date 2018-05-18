@@ -25,11 +25,11 @@ function formatCondition(where) {
     condition.where={};
     Object.keys(_where).forEach(v=>{
         typeof _where[v] === 'object' ? Object.keys(_where[v]).forEach(vv=>{
-            if(AllowdOperators.includes(vv)){
-                condition.where[v]=condition.where[v] || {};
-                condition.where[v]=Object.assign({},condition.where[v],{ [Op[vv]]:_where[v][vv]});
-            }
-        }) : (condition.where[v]=_where[v]);
+                if (AllowdOperators.includes(vv)) {
+                    condition.where[v] = condition.where[v] || {};
+                    condition.where[v] = Object.assign({}, condition.where[v], {[Op[vv]]: _where[v][vv]});
+                }
+            }) : (condition.where[v] = _where[v]);
     })
     return condition;
 }
@@ -146,8 +146,15 @@ module.exports={
         let res=null;
         if(id){
             // update
-            await _module.update(paras,{ where:{ id } });
-            res=await _module.findById(id);
+            res = await _module.findById(id);
+            if (!res) {
+                res = await _module.create(paras);
+            } else {
+                res = res.get({plain: true});
+                paras = Object.assign({}, res, paras);
+                await _module.update(paras, {where: {id}});
+                res = await _module.findById(id);
+            }
         }else{
             // add
             res=await _module.create(paras);
@@ -270,7 +277,7 @@ module.exports={
             let redisParas=[];
 
             db_res.forEach(v=>{
-               redisParas.push(v.id,JSON.stringify(v));
+                redisParas.push(v.id, JSON.stringify(v));
             });
 
             await RedisHandler.instance.exec('hmset',key,...redisParas);
