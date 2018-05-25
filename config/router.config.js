@@ -19,7 +19,7 @@ router.post('/',async (ctx,next)=>{
 
         ctx.error={
             code:'REQUEST_ERROR',
-            msg: e.code
+            error: e.code
         }
     }
     await next();
