@@ -8,7 +8,7 @@ module.exports=async (ctx,next)=>{
     //todo verify token
 
     //todo verify para
-    if(!ctx.$body.project || !ctx.$body.table || !ctx.$body.method){
+    if (!ctx.$body.dataSource || !ctx.$body.table || !ctx.$body.method) {
         ctx.error=ErrorCode.INVALID_PARAMETER;
         return ctx.status=400;
     }
@@ -18,7 +18,7 @@ module.exports=async (ctx,next)=>{
         return ctx.status=400;
     }
 
-    let key=ctx.$body.project +'-'+ctx.$body.table;
+    let key = ctx.$body.dataSource + '-' + ctx.$body.table;
 
     if(!TableMap.has(key)){
         ctx.error=ErrorCode.INVALID_PARAMETER;
